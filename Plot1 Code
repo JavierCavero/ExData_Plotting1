@@ -1,0 +1,24 @@
+## Downloading and unzipping
+url1<-"https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
+download.file(url1,"./assignmentData.zip")
+unzip("assignmentData.zip")
+powerConsumption<-read.table("household_power_consumption.txt",sep=";",header=TRUE)
+
+## Subsetting and converting factor data into numeric or time classes 
+subsetPowCon1<-powerConsumption[powerConsumption$Date=="1/2/2007",]
+subsetPowCon2<-powerConsumption[powerConsumption$Date=="2/2/2007",]
+subsetPowCon<-rbind(subsetPowCon1,subsetPowCon2)
+subsetPowCon$Time<-strptime(paste(subsetPowCon$Date,subsetPowCon$Time),"%d/%m/%Y %H:%M:%S")
+subsetPowCon$Global_active_power<-as.numeric(as.character(subsetPowCon$Global_active_power))
+subsetPowCon$Sub_metering_1<-as.numeric(as.character(subsetPowCon$Sub_metering_1))
+subsetPowCon$Sub_metering_2<-as.numeric(as.character(subsetPowCon$Sub_metering_2))
+subsetPowCon$Sub_metering_3<-as.numeric(as.character(subsetPowCon$Sub_metering_3))
+subsetPowCon$Voltage<-as.numeric(as.character(subsetPowCon$Voltage))
+subsetPowCon$Global_reactive_power<-as.numeric(as.character(subsetPowCon$Global_reactive_power))
+
+## Plot1
+par(mfrow=c(1,1))
+hist(subsetPowCon$Global_active_power,col="red",
+     main="Global Active Power",xlab="Global Active Power (kilowatts)")
+dev.copy(png,file="plot1.png")
+dev.off()
